@@ -79,6 +79,7 @@ func main() {
 	port := flag.String("port", "8090", "define port that the service will listen to")
 	flag.Parse()
 
+	log.Println("Yoni's push test")
 	log.Println("Starting bm service")
 
 	var kclient client.Client
