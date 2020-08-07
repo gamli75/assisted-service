@@ -105,7 +105,7 @@ type Cluster struct {
 
 	// Status of the OpenShift cluster.
 	// Required: true
-	// Enum: [insufficient ready error preparing-for-installation installing finalizing installed]
+	// Enum: [insufficient ready error preparing-for-installation pending-for-input installing finalizing installed]
 	Status *string `json:"status"`
 
 	// Additional information pertaining to the status of the OpenShift cluster.
@@ -122,6 +122,9 @@ type Cluster struct {
 
 	// user id
 	UserID string `json:"user_id,omitempty"`
+
+	// Json formatted string containing the validations results for each validation id grouped by category (network, hosts-data, etc.)
+	ValidationsInfo string `json:"validations_info,omitempty" gorm:"type:varchar(2048)"`
 
 	// Indicate if VIP DHCP allocation mode is enabled.
 	VipDhcpAllocation *bool `json:"vip_dhcp_allocation,omitempty"`
@@ -515,7 +518,7 @@ var clusterTypeStatusPropEnum []interface{}
 
 func init() {
 	var res []string
-	if err := json.Unmarshal([]byte(`["insufficient","ready","error","preparing-for-installation","installing","finalizing","installed"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["insufficient","ready","error","preparing-for-installation","pending-for-input","installing","finalizing","installed"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {
@@ -536,6 +539,9 @@ const (
 
 	// ClusterStatusPreparingForInstallation captures enum value "preparing-for-installation"
 	ClusterStatusPreparingForInstallation string = "preparing-for-installation"
+
+	// ClusterStatusPendingForInput captures enum value "pending-for-input"
+	ClusterStatusPendingForInput string = "pending-for-input"
 
 	// ClusterStatusInstalling captures enum value "installing"
 	ClusterStatusInstalling string = "installing"
